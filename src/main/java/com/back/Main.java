@@ -18,6 +18,7 @@ public class Main {
                 String wiseSaying = scanner.nextLine().trim();
                 System.out.print("작가 : ");
                 String author = scanner.nextLine().trim();
+                System.out.println("1번 명언이 등록되었습니다."); // 등록시 생성된 명언번호 노출 <추가>
             }
         }
 
