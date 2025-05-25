@@ -62,15 +62,20 @@ public class Main {
                 System.out.print("삭제할 명언 번호 : ");
                 int deleteNumber = scanner.nextInt();
                 scanner.nextLine(); // nextInt()는 숫자를 읽고 나서 '엔터'를 그대로 남겨둬서, 이후 scanner.nextLine() 사용 시 빈 줄이 넘어올 수 있다. 그래서 nextLine() 한 번 써주기.
+                boolean exist = false; // 예외처리를 위해 deleteNumber가 존재하는지 확인하기 위한 변수.
 
                 for (int i = 0; i < wiseSayingLists.size(); i++) {
                     if (wiseSayingLists.get(i).number == deleteNumber) {
                         wiseSayingLists.remove(i);
                         System.out.println(deleteNumber + "번 명언이 삭제되었습니다.");
+                        exist = true; // deleteNumber를 찾았다는 의미.
                         break;
                     }
                 }
 
+                if (!exist) { // deleteNumber를 찾지 못한 경우
+                    System.out.println(deleteNumber + "번 명언은 존재하지 않습니다.");
+                }
             }
         }
 
