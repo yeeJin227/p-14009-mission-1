@@ -25,6 +25,8 @@ public class App {
                 actionWrite();
             } else if (cmd.equals("목록")) {
                 actionList();
+            } else if (cmd.startsWith("삭제")) {
+                actionDelete(cmd);
             }
         }
         scanner.close();
@@ -55,6 +57,26 @@ public class App {
         for (WiseSaying wiseSaying : forListWiseSayings) {
             System.out.printf("%d / %s / %s\n", wiseSaying.id, wiseSaying.author, wiseSaying.content);
         }
+    }
+
+    // 삭제 시 출력 담당
+    void actionDelete(String cmd) {
+        String[] cmdBits = cmd.split("=",2);
+
+        if (cmdBits.length < 2 || cmdBits[1].isEmpty()) {
+            System.out.println("id를 입력해주세요.");
+            return;
+        }
+
+        int id = Integer.parseInt(cmdBits[1]);
+        int deletedIndex = delete(id);
+
+        if (deletedIndex == -1) {
+            System.out.println("%d번 명언은 존재하지 않습니다.".formatted(id));
+            return;
+        }
+
+        System.out.println("%d번 명언이 삭제되었습니다.".formatted(id));
     }
 
 
@@ -90,4 +112,30 @@ public class App {
         return wiseSaying;
     }
 
+    // 삭제 로직
+    int delete(int id) {
+        int deleteIndex = -1;
+
+        // 삭제하고자 하는 번호의 wiseSayings[] 명언을 찾는 과정
+        for (int i = 0; i <= wiseSayingsLastIndex; i++) {
+            if (wiseSayings[i].id == id) {
+                deleteIndex = i;
+                break;
+            }
+        }
+
+        // 명언 없을 때
+        if (deleteIndex == -1) return deleteIndex;
+
+        // 명언 있으면 해당 인덱스 뒤부터 '인덱스 번호 하나씩 앞으로 땡기기'
+        for (int i = deleteIndex + 1; i <= wiseSayingsLastIndex; i++) {
+            wiseSayings[i - 1] = wiseSayings[i];
+        }
+
+        // 마지막 명언 인덱스에 null값 넣기
+        wiseSayings[wiseSayingsLastIndex] = null;
+        wiseSayingsLastIndex--;  // 명언 개수 1개 줄이기
+
+        return deleteIndex;
+    }
 }
