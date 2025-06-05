@@ -27,6 +27,8 @@ public class App {
                 actionList();
             } else if (cmd.startsWith("삭제")) {
                 actionDelete(cmd);
+            } else if (cmd.startsWith("수정")) {
+                actionModify(cmd);
             }
         }
         scanner.close();
@@ -78,6 +80,39 @@ public class App {
 
         System.out.println("%d번 명언이 삭제되었습니다.".formatted(id));
     }
+
+    // 수정 시 출력 담당
+    void actionModify(String cmd) {
+        String[] cmdBits = cmd.split("=" ,2);
+
+        // 수정할 번호가 입력이 안됐을 때 예외처리
+        if (cmdBits.length < 2 || cmdBits[1].isEmpty()){
+            System.out.println("id를 입력해주세요.");
+            return;
+        }
+
+        int id = Integer.parseInt(cmdBits[1]);
+        WiseSaying wiseSaying = findById(id);
+
+        // 수정할 번허의 명언이 없을 때 예외처리
+        if (wiseSaying == null) {
+            System.out.println("%d번 명언은 존재하지 않습니다.".formatted(id));
+            return;
+        }
+
+        // 수정된 명언,작가 입력받기
+        System.out.printf("명언(기존) : %s\n" , wiseSaying.content);
+        System.out.print("명언 : ");
+        String content = scanner.nextLine().trim();
+
+        System.out.printf("작가(기존) : %s\n" , wiseSaying.author);
+        System.out.print("작가 : ");
+        String author = scanner.nextLine().trim();
+
+        // 수정된 내용으로 값 대입
+        modify(wiseSaying, content, author);
+    }
+
 
 
     // 내부 로직 메서드들
@@ -137,5 +172,30 @@ public class App {
         wiseSayingsLastIndex--;  // 명언 개수 1개 줄이기
 
         return deleteIndex;
+    }
+
+    // 수정 로직
+    WiseSaying findById(int id) {
+        int index = findIndexById(id);
+
+        if (index == -1 ) return null; // 수정하고자 하는 번호의 wiseSayings[] 명언이 없으면 null을 return.
+
+        return wiseSayings[index]; // 수정하고자 하는 번호의 wiseSayings[] 명언을 return.
+    }
+
+    int findIndexById(int id) {
+        // 수정하고자 하는 번호의 wiseSayings[] 명언을 찾는 과정
+        for (int i = 0; i <= wiseSayingsLastIndex; i++) {
+            if (wiseSayings[i].id == id) {
+                return i;
+            }
+        }
+
+        return -1; // 못찾으면 -1을 return
+    }
+
+    void modify(WiseSaying wiseSaying, String content, String author) {
+        wiseSaying.content = content;
+        wiseSaying.author = author;
     }
 }
