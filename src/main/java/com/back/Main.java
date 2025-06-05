@@ -15,6 +15,12 @@ public class Main {
             if (str.equals("종료")) {
                 break;
             }
+            else if (str.equals("등록")) {
+                System.out.print("명언 : ");
+                String wiseSayingContent = scanner.nextLine().trim();
+                System.out.print("작가 : ");
+                String wiseSayingAuthor = scanner.nextLine().trim();
+            }
         }
         scanner.close();
     }
